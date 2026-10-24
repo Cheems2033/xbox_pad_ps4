@@ -1,0 +1,27 @@
+name: Compilar PRX
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: ps4dev/ps4sdk:latest
+
+    steps:
+      - name: Clonar código
+        uses: actions/checkout@v3
+
+      - name: Compilar con Makefile
+        run: |
+          make clean
+          make
+
+      - name: Subir archivo PRX compilado
+        uses: actions/upload-artifact@v3
+        with:
+          name: xbox_pad_plugin
+          path: release/xbox_pad.prx
